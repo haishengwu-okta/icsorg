@@ -303,12 +303,14 @@ function mapOccurences(occurrences, author, email) {
  * @param {Array} events - array of event objects
  */
 function createOrgFile(config, events) {
+  const fileName = config.ORG_FILE.split('/').pop();
+  const category = config.CATEGORY || fileName.replace('.org', '');
   const header = [
     `#+TITLE:       ${config.TITLE}\n`,
     `#+AUTHOR:      ${config.AUTHOR}\n`,
     `#+EMAIL:       ${config.EMAIL}\n`,
     "#+DESCRIPTION: converted using icsorg node script\n",
-    `#+CATEGORY:    ${config.CATEGORY}\n`,
+    `#+CATEGORY:    ${category}\n`,
     `#+STARTUP:     ${config.STARTUP}\n`,
     `#+FILETAGS:    ${config.FILETAGS}\n`,
     "\n",
