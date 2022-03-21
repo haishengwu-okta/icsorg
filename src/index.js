@@ -414,6 +414,10 @@ async function main() {
       config.EMAIL
     );
     let allEvents = [...mappedEvents, ...mappedOccurrences];
+    allEvents = allEvents.filter((e) => {
+      return !e.attendees || !e.attendees.length
+        || e.attendees.filter(a => a.status === 'ACCEPTED' && a.cn === config.EMAIL).length>0;
+    });
     createOrgFile(config, allEvents);
     console.log(
       `Generated new org file in ${config.ORG_FILE} with ${allEvents.length} entries`
