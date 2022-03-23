@@ -403,24 +403,31 @@ async function main() {
       dumpConfig(config);
     }
 
+    console.time("profile")
     let data = await getIcsData(config.ICS_FILE);
+    console.timeLog('profile');
     const expander = new IcalExpander({ ics: data, maxIterations: 1000 });
     const events = expander.between(
       config.START_DATE.toJSDate(),
       config.END_DATE.toJSDate()
     );
+    console.timeLog('profile');
     const mappedEvents = mapEvents(events.events, config.AUTHOR, config.EMAIL);
+    console.timeLog('profile');
     const mappedOccurrences = mapOccurences(
       events.occurrences,
       config.AUTHOR,
       config.EMAIL
     );
+    console.timeLog('profile');
     let allEvents = [...mappedEvents, ...mappedOccurrences];
     allEvents = allEvents.filter((e) => {
       return !e.attendees || !e.attendees.length
         || e.attendees.filter(a => a.status === 'ACCEPTED' && a.cn === config.EMAIL).length>0;
     });
+    console.timeLog('profile');
     createOrgFile(config, allEvents);
+    console.timeEnd('profile');
     console.log(
       `Generated new org file in ${config.ORG_FILE} with ${allEvents.length} entries`
     );
